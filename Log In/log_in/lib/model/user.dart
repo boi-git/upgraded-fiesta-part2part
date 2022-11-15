@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class User {
   final String name;
   final String role;
@@ -16,5 +14,33 @@ class User {
   static User fromJson(Map<String, dynamic> json) => User(
         name: json['username'],
         role: json['role'],
+      );
+}
+
+class Classes {
+  final String coursecode;
+  final String coursename;
+  final String lectureid;
+  //final List<String> member;
+
+  Classes({
+    required this.coursecode,
+    required this.coursename,
+    required this.lectureid,
+    //required this.member,
+  });
+
+  Map<String, dynamic> toJsonClasses() => {
+        'coursecode': coursecode,
+        'coursename': coursename,
+        'lectureid': lectureid,
+        // 'member': member,
+      };
+
+  static Classes fromJson(Map<String, dynamic> json) => Classes(
+        coursecode: json['coursecode'],
+        coursename: json['coursename'],
+        lectureid: json['lectureid'],
+        // member: json[['member']]
       );
 }

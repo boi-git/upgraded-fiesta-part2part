@@ -14,14 +14,22 @@ class TestPage extends StatelessWidget {
       .map((snapshot) =>
           snapshot.docs.map((doc) => user.User.fromJson(doc.data())).toList());
 
-  Widget buildUser(user.User user) => ListTile(
-      leading: CircleAvatar(child: Text(user.role)), title: Text(user.name));
+  Stream<List<user.Classes>> readClass() => fs.FirebaseFirestore.instance
+      .collection('classlist')
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => user.Classes.fromJson(doc.data()))
+          .toList());
+
+  Widget buildUser(user.Classes user) => ListTile(
+      leading: CircleAvatar(child: Text(user.coursecode)),
+      title: Text(user.coursename));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-          stream: readUser(),
+          stream: readClass(),
           builder: ((context, snapshot) {
             if (snapshot.hasError) {
               return Text('${snapshot.error}');
