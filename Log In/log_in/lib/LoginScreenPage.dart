@@ -5,17 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:log_in/CreateUser.dart';
-import 'package:log_in/Services/Auth_Services.dart';
-import 'package:provider/provider.dart';
 
 import 'ClassFinderPage.dart';
 import 'HomePageScreen.dart';
-import 'ProfileScreenPage.dart';
 import 'Test.dart';
-import 'util/BuildAppBar.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final keyUsername = GlobalKey();
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -50,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -118,7 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   print(user);
                   if (user != null) {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const TestPage()));
+                        builder: (context) => TestPage(
+                              userName: emailController.text.toString(),
+                            )));
                   }
                 },
                 child: const Text(

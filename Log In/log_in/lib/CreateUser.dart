@@ -69,7 +69,7 @@ class _CreateUserState extends State<CreateUser> {
 
                 Navigator.of(context).pop(
                   MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
+                    builder: (context) => LoginScreen(),
                   ),
                 );
               },

@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +52,10 @@ class AuthWrapper extends StatelessWidget {
     final user = context.watch<AuthService>();
 
     if (user != null) {
-      return const LoginScreen();
+      return LoginScreen();
     }
-    return const TestPage();
+    return const TestPage(
+      userName: '',
+    );
   }
 }
