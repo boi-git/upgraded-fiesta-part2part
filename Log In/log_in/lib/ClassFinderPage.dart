@@ -39,19 +39,6 @@ class _ClassFinderState extends State<ClassFinder> {
                   itemBuilder: (context, index) {
                     var data = snapshot.data!.docs[index].data()
                         as Map<String, dynamic>;
-                    if (name.isEmpty) {
-                      return ListTile(
-                        title: Text(
-                          data['coursecode'],
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          data['coursename'],
-                          maxLines: 1,
-                        ),
-                      );
-                    }
                     if (data['member']
                         .toString()
                         .contains(name.toLowerCase())) {

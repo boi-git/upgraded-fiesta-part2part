@@ -1,49 +1,58 @@
 // ignore_for_file: file_names
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'model/user.dart' as user;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TestPage extends StatelessWidget {
+class TestPage extends StatefulWidget {
   const TestPage({super.key});
 
-  Stream<List<user.User>> readUser() => fs.FirebaseFirestore.instance
-      .collection('users')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => user.User.fromJson(doc.data())).toList());
+  @override
+  State<TestPage> createState() => _TestPageState();
+}
 
-  Stream<List<user.Classes>> readClass() => fs.FirebaseFirestore.instance
-      .collection('classlist')
+class _TestPageState extends State<TestPage> {
+  static final user_ = FirebaseAuth.instance.currentUser!;
+  final userRef = fs.FirebaseFirestore.instance
+      .collection('users')
+      .where('email', isEqualTo: user_.email)
       .snapshots()
       .map((snapshot) => snapshot.docs
           .map((doc) => user.Classes.fromJson(doc.data()))
           .toList());
 
-  Widget buildUser(user.Classes user) => ListTile(
+  Stream<List<user.Classes>> readClass() => fs.FirebaseFirestore.instance
+      .collection('classlist')
+      .where('email', isEqualTo: user_.email)
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => user.Classes.fromJson(doc.data()))
+          .toList());
+
+  Widget buildUser(user.User user) => ListTile(
+      leading: CircleAvatar(child: Text(user.name)), title: Text(user.role));
+
+  Widget buildClass(user.Classes user) => ListTile(
       leading: CircleAvatar(child: Text(user.coursecode)),
       title: Text(user.coursename));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-          stream: readClass(),
-          builder: ((context, snapshot) {
-            if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            } else if (snapshot.hasData) {
-              final users = snapshot.data!;
-              return ListView(
-                children: users.map(buildUser).toList(),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          })),
+      body: StreamBuilder<List<user.Classes>>(
+        stream: readClass(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final users = snapshot.data!;
+            return ListView(
+              children: users.map(buildClass).toList(),
+            );
+          } else {
+            return const Text("test");
+          }
+        },
+      ),
     );
   }
 }
